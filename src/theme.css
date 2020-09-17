@@ -1,0 +1,21 @@
+@media (prefers-color-scheme: light) {
+  body {
+    background: white;
+    color: #222;
+  }
+
+  article {
+    background: #eee;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: black;
+    color: #eee;
+  }
+
+  article {
+    background: #111;
+  }
+}
