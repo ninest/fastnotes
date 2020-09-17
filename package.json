@@ -4,7 +4,8 @@
   "description": "Take quick notes in your browser",
   "scripts": {
     "dev": "npm run clean && parcel src/index.html",
-    "clean": "rimraf ./public && rimraf ./dist && rimraf ./.cache"
+    "clean": "rimraf ./public && rimraf ./dist && rimraf ./.cache",
+    "build": "npm run clean && parcel build src/index.html"
   },
   "keywords": [],
   "author": "",
