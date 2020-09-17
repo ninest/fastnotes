@@ -1,0 +1,17 @@
+{
+  "name": "quick-notes",
+  "version": "1.0.0",
+  "description": "Take quick notes in your browser",
+  "scripts": {
+    "dev": "npm run clean && parcel src/index.html",
+    "clean": "rimraf ./public && rimraf ./dist && rimraf ./.cache"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "parcel-bundler": "^1.12.4",
+    "rimraf": "^3.0.2",
+    "workbox-cli": "^5.1.4"
+  }
+}
