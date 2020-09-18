@@ -4,8 +4,9 @@
     color: #222;
   }
 
-  article {
+  textarea {
     background: #fafafa;
+    color: #222;
   }
 }
 
@@ -15,7 +16,8 @@
     color: #eee;
   }
 
-  article {
+  textarea {
     background: #111;
+    color: #eee;
   }
 }
