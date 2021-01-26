@@ -6,14 +6,23 @@ import {
 const $title = document.querySelector("#title");
 const $note = document.querySelector("#editor");
 
+const setTitle = () => {
+  const title = $title.value;
+  // Set document title as note name and time
+  const date = new Date();
+  document.title = `${title} - ${date.getHours()}:${date.getMinutes()}`;
+};
+
 const save = () => {
+  const title = $title.value;
   const note = {
-    title: $title.value,
+    title,
     content: $note.innerText,
   };
 
   const compressed = compressToEncodedURIComponent(JSON.stringify(note));
   history.replaceState(undefined, undefined, `#${compressed}`);
+  setTitle();
 };
 const load = () => {
   const note = JSON.parse(
@@ -22,6 +31,8 @@ const load = () => {
   if (note) {
     $title.value = note.title;
     $note.innerText = note.content;
+
+    setTitle();
   }
 };
 

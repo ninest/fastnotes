@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Add placeholder to div */
+#editor:empty:before {
+  content:attr(data-placeholder);
+  /* color:gray */
+  @apply text-gray-500;
+}

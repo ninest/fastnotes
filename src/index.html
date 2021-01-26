@@ -6,18 +6,22 @@
     <link rel="stylesheet" href="./index.css" />
     <title>Quick Notes</title>
   </head>
-  <body class="bg-gray-100 py-60">
-    <input
-      type="text"
-      class="w-full p-5 text-3xl font-black bg-gray-100 focus:bg-gray-200 focus:outline-none"
-      id="title"
-      placeholder="Enter a title"
-    />
-    <div
-      class="min-h-screen p-5 focus:outline-none"
-      id="editor"
-      contenteditable
-    ></div>
+  <body class="bg-gray-100">
+    <div class="mt-64 mb-18 md:mx-32 lg:mx-80">
+      <input
+        type="text"
+        class="w-full p-8 text-3xl font-black text-gray-900 placeholder-gray-500 bg-transparent focus:outline-none"
+        id="title"
+        placeholder="Enter a title"
+      />
+
+      <div
+        class="min-h-screen p-8 text-lg leading-9 tracking-wide text-gray-800 focus:outline-none"
+        id="editor"
+        data-placeholder="Start writing"
+        contenteditable
+      ></div>
+    </div>
   </body>
   <script src="~/script.js"></script>
 </html>
