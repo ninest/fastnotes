@@ -3,29 +3,39 @@ import {
   decompressFromEncodedURIComponent,
 } from "lz-string";
 
-const $note = document.querySelector("textarea");
+const $title = document.querySelector("#title");
+const $note = document.querySelector("#editor");
 
 const save = () => {
-  const text = $note.value;
-  // localStorage.note = text;
-  const compressed = compressToEncodedURIComponent(text);
+  const note = {
+    title: $title.value,
+    content: $note.innerText,
+  };
+
+  const compressed = compressToEncodedURIComponent(JSON.stringify(note));
   history.replaceState(undefined, undefined, `#${compressed}`);
 };
 const load = () => {
-  const text = decompressFromEncodedURIComponent(location.hash.substring(1));
-  console.log(text)
-  $note.value = text;
+  const note = JSON.parse(
+    decompressFromEncodedURIComponent(location.hash.substring(1))
+  );
+  if (note) {
+    $title.value = note.title;
+    $note.innerText = note.content;
+  }
 };
 
-// Load previously saved note
 window.onload = () => {
+  // Load note in #URL
   load();
 };
-// Save note on edit
-// $note.onkeyup = () => {
-//   save();
-//   links();
-// };
+
+// Prevent rich text in editor
+$note.addEventListener("paste", (e) => {
+  e.preventDefault();
+  var text = e.clipboardData.getData("text/plain");
+  document.execCommand("insertText", false, text);
+});
 
 // Control S to save
 window.addEventListener("keydown", (e) => {

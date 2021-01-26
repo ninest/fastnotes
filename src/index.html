@@ -3,12 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/style.css" />
-    <link rel="stylesheet" href="~/theme.css" />
+    <link rel="stylesheet" href="./index.css" />
     <title>Quick Notes</title>
   </head>
-  <body>
-    <textarea autofocus></textarea>
+  <body class="bg-gray-100 py-60">
+    <input
+      type="text"
+      class="w-full p-5 text-3xl font-black bg-gray-100 focus:bg-gray-200 focus:outline-none"
+      id="title"
+      placeholder="Enter a title"
+    />
+    <div
+      class="min-h-screen p-5 focus:outline-none"
+      id="editor"
+      contenteditable
+    ></div>
   </body>
   <script src="~/script.js"></script>
 </html>

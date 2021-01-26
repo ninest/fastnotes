@@ -11,8 +11,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.0.2",
+    "autoprefixer": "^9",
     "parcel-bundler": "^1.12.4",
+    "postcss": "^7",
     "rimraf": "^3.0.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "workbox-cli": "^5.1.4"
   },
   "dependencies": {
