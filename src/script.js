@@ -48,10 +48,13 @@ $note.addEventListener("paste", (e) => {
   document.execCommand("insertText", false, text);
 });
 
-// Control S to save
+// Control S to save, or save on enter
 window.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "s") {
     save();
     e.preventDefault();
+  }
+  if (e.code == "Enter") {
+    save();
   }
 });
