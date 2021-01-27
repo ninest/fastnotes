@@ -13,6 +13,8 @@ const setTitle = () => {
   document.title = `${title} - ${date.getHours()}:${date.getMinutes()}`;
 };
 
+let previousCompressedNote;
+
 const save = () => {
   const title = $title.value;
   const note = {
@@ -21,8 +23,14 @@ const save = () => {
   };
 
   const compressed = compressToEncodedURIComponent(JSON.stringify(note));
+
+  // Don't save note if it's the same as this will case unnecessary history
+  if (compressed === previousCompressedNote) return;
+
   history.replaceState(undefined, undefined, `#${compressed}`);
   setTitle();
+
+  previousCompressedNote = compressed;
 };
 const load = () => {
   const note = JSON.parse(
@@ -58,3 +66,6 @@ window.addEventListener("keydown", (e) => {
     save();
   }
 });
+
+// Save every few seconds
+setInterval(() => save(), 1500);
