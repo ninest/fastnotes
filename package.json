@@ -20,6 +20,7 @@
     "workbox-cli": "^5.1.4"
   },
   "dependencies": {
+    "date-fns": "^2.16.1",
     "lz-string": "^1.4.4"
   }
 }

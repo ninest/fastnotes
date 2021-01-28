@@ -2,15 +2,18 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
+import { getHours, getMinutes, getSeconds } from "date-fns";
 
 const $title = document.querySelector("#title");
 const $note = document.querySelector("#editor");
 
 const setTitle = () => {
-  const title = $title.value;
+  const title = $title.value || "Untitled";
   // Set document title as note name and time
   const date = new Date();
-  document.title = `${title} - ${date.getHours()}:${date.getMinutes()}`;
+
+  // prettier-ignore
+  document.title = `${title} - ${getHours(date)}:${getMinutes(date)}:${getSeconds(date)}`;
 };
 
 let previousCompressedNote;
