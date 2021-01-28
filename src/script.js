@@ -1,65 +1,70 @@
 import {
-  compressToEncodedURIComponent,
-  decompressFromEncodedURIComponent,
+  compressToEncodedURIComponent as compress,
+  decompressFromEncodedURIComponent as decompress,
 } from "lz-string";
-import { getHours, getMinutes, getSeconds } from "date-fns";
 
+import { formatCreatedAt, setTitle } from "./utils";
+
+let createdAt;
+const $createdAt = document.querySelector("#created_at");
 const $title = document.querySelector("#title");
 const $note = document.querySelector("#editor");
 
-const setTitle = () => {
-  const title = $title.value || "Untitled";
-  // Set document title as note name and time
-  const date = new Date();
-
-  // prettier-ignore
-  document.title = `${title} - ${getHours(date)}:${getMinutes(date)}:${getSeconds(date)}`;
-};
-
 let previousCompressedNote;
-
 const save = () => {
-  const title = $title.value;
-  const note = {
-    title,
-    content: $note.innerText,
-  };
+  const title = $title.innerText;
 
-  const compressed = compressToEncodedURIComponent(JSON.stringify(note));
+  // Only save note if title is not empty
+  if (title) {
+    // Set createdAt if not set
+    if (!createdAt) {
+      createdAt = new Date();
+      $createdAt.innerText = formatCreatedAt(createdAt);
+    }
 
-  // Don't save note if it's the same as this will case unnecessary history
-  if (compressed === previousCompressedNote) return;
+    // Create note object
+    const note = {
+      createdAt: createdAt.toISOString(),
+      title,
+      content: $note.innerText,
+    };
 
-  history.replaceState(undefined, undefined, `#${compressed}`);
-  setTitle();
+    const compressed = compress(JSON.stringify(note));
 
-  previousCompressedNote = compressed;
-};
-const load = () => {
-  const note = JSON.parse(
-    decompressFromEncodedURIComponent(location.hash.substring(1))
-  );
-  if (note) {
-    $title.value = note.title;
-    $note.innerText = note.content;
+    // Don't save note if it's the same as this will case unnecessary history
+    if (compressed === previousCompressedNote) return;
 
-    setTitle();
+    history.replaceState(undefined, undefined, `#${compressed}`);
+    setTitle(title);
+
+    previousCompressedNote = compressed;
   }
 };
 
-window.onload = () => {
-  // Load note in #URL
-  load();
+const load = () => {
+  const note = JSON.parse(decompress(location.hash.substring(1)));
+  if (note) {
+    $title.innerText = note.title;
+    $note.innerText = note.content;
+    createdAt = new Date(note.createdAt);
+
+    setTitle(note.title);
+
+    $createdAt.innerText = formatCreatedAt(createdAt);
+  }
 };
 
-// Prevent rich text in editor
+/* Load note from URL */
+window.addEventListener("load", load);
+
+/* Prevent rich text in editor */
 $note.addEventListener("paste", (e) => {
   e.preventDefault();
   var text = e.clipboardData.getData("text/plain");
   document.execCommand("insertText", false, text);
 });
 
-// Control S to save, or save on enter
+/* Control S to save, or save on enter */
 window.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "s") {
     save();
@@ -70,5 +75,5 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
-// Save every few seconds
-setInterval(() => save(), 1500);
+/* Save every few seconds */
+setInterval(() => save(), 2000);

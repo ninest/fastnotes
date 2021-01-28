@@ -4,22 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./index.css" />
-    <title>Quick Notes</title>
+    <title>Fastnotes</title>
   </head>
   <body class="bg-gray-100">
     <div class="mt-64 mb-18 md:mx-32 lg:mx-80">
-      <input
-        type="text"
-        class="w-full p-8 text-3xl font-black text-gray-900 placeholder-gray-500 bg-transparent focus:outline-none"
+      <time id="created_at" class="p-8 font-semibold text-gray-400"></time>
+      <!-- <input type="text" /> -->
+      <div
+        class="w-full p-8 text-3xl font-black text-gray-900 placeholder-gray-500 break-words bg-transparent focus:outline-none"
         id="title"
-        placeholder="Enter a title"
-      />
+        data-placeholder="Enter a title"
+        contenteditable="true"
+      ></div>
 
       <div
         class="min-h-screen p-8 text-lg leading-9 tracking-wide text-gray-800 focus:outline-none"
         id="editor"
         data-placeholder="Start writing"
-        contenteditable
+        contenteditable="true"
       ></div>
     </div>
   </body>

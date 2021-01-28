@@ -1,6 +1,6 @@
-# [Quick Note](https://quicknote.now.sh/)
+# [Fastnote](https://quicknote.now.sh/)
 
-> **📝 Note-taking PWA powered by `localStorage`**
+> **📝 Note-taking PWA**
 
 ![GitHub](https://img.shields.io/github/license/ninest/quick-note?style=flat-square)
 [![BMAC](https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-orange.svg?style=flat-square)](https://www.buymeacoffee.com/ninest)
