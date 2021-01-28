@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "date-fns": "^2.16.1",
-    "lz-string": "^1.4.4"
+    "lz-string": "^1.4.4",
+    "write-good": "^1.0.4"
   }
 }

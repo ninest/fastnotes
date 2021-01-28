@@ -1,8 +1,10 @@
 import { getHours, getMinutes, getSeconds } from "date-fns";
 import { formatRelative, parseISO } from "date-fns";
+import writeGood from "write-good";
 
 export const setTitle = (noteTitle) => {
-  const title = noteTitle || "Untitled";
+  const title = noteTitle.trim() || "Untitled";
+
   const date = new Date();
 
   const h = padTime(getHours(date));
@@ -20,4 +22,12 @@ export const formatCreatedAt = (createdAt) => {
   } else {
     return formatRelative(createdAt, new Date());
   }
+};
+
+export const getWritingSuggestions = (text) => {
+  const suggestions = writeGood(text).map((wgSuggetion) => ({
+    explanation: wgSuggetion.reason,
+    position: wgSuggetion.index,
+  }));
+  return suggestions;
 };

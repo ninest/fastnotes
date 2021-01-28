@@ -3,12 +3,14 @@ import {
   decompressFromEncodedURIComponent as decompress,
 } from "lz-string";
 
-import { formatCreatedAt, setTitle } from "./utils";
+import { formatCreatedAt, setTitle, getWritingSuggestions } from "./utils";
 
 let createdAt;
 const $createdAt = document.querySelector("#created_at");
 const $title = document.querySelector("#title");
 const $note = document.querySelector("#editor");
+
+const $suggestions = document.querySelector("#suggestions");
 
 let previousCompressedNote;
 const save = () => {
@@ -64,10 +66,18 @@ $note.addEventListener("paste", (e) => {
   document.execCommand("insertText", false, text);
 });
 
-/* Control S to save, or save on enter */
+/* Control S to save, or save on enter, and show suggestions on save */
 window.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "s") {
     save();
+
+    // Show write good suggestions
+    $suggestions.innerHTML = "";
+    const suggestions = getWritingSuggestions($note.innerText);
+    suggestions.forEach((suggestion) => {
+      $suggestions.innerHTML += `<li>${suggestion.explanation}</li>`;
+    });
+
     e.preventDefault();
   }
   if (e.code == "Enter") {
