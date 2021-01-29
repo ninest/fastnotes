@@ -2,6 +2,7 @@ import {
   compressToEncodedURIComponent as compress,
   decompressFromEncodedURIComponent as decompress,
 } from "lz-string";
+import { AES, enc } from "crypto-js";
 
 import { formatCreatedAt, setTitle, getWritingSuggestions } from "./utils";
 
@@ -13,7 +14,10 @@ const $note = document.querySelector("#editor");
 const $passwordForm = document.querySelector("#password_form");
 
 // Default password
-let password = "";
+let password = "SECRET_KEY";
+
+// Password required to open note?
+let requirePassword = false;
 
 const $suggestions = document.querySelector("#suggestions");
 
@@ -29,11 +33,16 @@ const save = () => {
       $createdAt.innerText = formatCreatedAt(createdAt);
     }
 
+    console.log("Saving note with password:", password);
+
     // Create note object
     const note = {
       createdAt: createdAt.toISOString(),
       title,
-      content: $note.innerText,
+      content: AES.encrypt(
+        JSON.stringify($note.innerText),
+        password.trim()
+      ).toString(),
     };
 
     const compressed = compress(JSON.stringify(note));
@@ -52,12 +61,26 @@ const load = () => {
   const note = JSON.parse(decompress(location.hash.substring(1)));
   if (note) {
     $title.innerText = note.title;
-    $note.innerText = note.content;
-    createdAt = new Date(note.createdAt);
 
-    setTitle(note.title);
+    console.log("Unlocking note with password:", password.trim());
 
-    $createdAt.innerText = formatCreatedAt(createdAt);
+    // Decrypt notes
+    try {
+      const bytes = AES.decrypt(note.content, password);
+      console.log(bytes.toString(enc.Utf8));
+      $note.innerText = JSON.parse(bytes.toString(enc.Utf8)); // Throws error if password incorrect
+      createdAt = new Date(note.createdAt);
+      setTitle(note.title);
+
+      $createdAt.innerText = formatCreatedAt(createdAt);
+    } catch (e) {
+      console.log("need to enter password!");
+      $note.setAttribute(
+        "data-placeholder",
+        "Please enter the password to view the note"
+      );
+      requirePassword = true;
+    }
   }
 };
 
@@ -98,5 +121,5 @@ $passwordForm.addEventListener("submit", function (e) {
   const data = new FormData($passwordForm);
   password = data.get("password");
 
-  // Hide password field
+  if (requirePassword) load();
 });

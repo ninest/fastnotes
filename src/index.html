@@ -25,15 +25,11 @@
         data-placeholder="Start writing"
         contenteditable="true"
       ></div>
-
-      <div class="">
-        <ul class="list-outside ml-5 list-disc" id="suggestions"></ul>
-      </div>
     </main>
 
     <div class="h-screen flex-grow-1 w-3/12">
       <aside
-        class="sticky bg-gray-100 h-screen overflow-scroll top-0 border-l-4 p-8"
+        class="sticky bg-gray-100 h-screen overflow-scroll top-0 border-l-4 p-8 space-y-5"
       >
         <!-- Password group -->
         <section>
@@ -43,15 +39,23 @@
               id="password"
               type="text"
               name="password"
-              class="block flex-grow w-0 p-1 text-sm bg-gray-100 border border-gray-300 focus:outline-none focus:border-indigo-600"
+              class="rounded-l-md block flex-grow w-0 p-1 text-sm bg-gray-100 border border-gray-300 focus:outline-none focus:border-indigo-600"
             />
             <button
               id="set_password_button"
-              class="block flex-none py-1 px-2 text-sm bg-gray-300 text-gray-700 border border-gray-300"
+              class="rounded-r-md rounded- block flex-none py-1 px-2 text-sm bg-gray-300 text-gray-700 border border-gray-300 focus:bg-indigo-600 focus:text-gray-100"
             >
-              Set
+              Enter
             </button>
           </form>
+        </section>
+
+        <!-- Suggestions -->
+        <section>
+          <h3 class="font-semibold mb-2">Suggestions</h3>
+          <ul class="list-outside ml-5 list-disc" id="suggestions">
+            <li>No suggestions yet</li>
+          </ul>
         </section>
       </aside>
     </div>
