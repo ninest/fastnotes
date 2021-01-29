@@ -9,6 +9,11 @@ let createdAt;
 const $createdAt = document.querySelector("#created_at");
 const $title = document.querySelector("#title");
 const $note = document.querySelector("#editor");
+const $setPasswordButton = document.querySelector("#set_password_button");
+const $password = document.querySelector("#password");
+
+// Default password
+let password = "";
 
 const $suggestions = document.querySelector("#suggestions");
 
@@ -87,3 +92,7 @@ window.addEventListener("keydown", (e) => {
 
 /* Save every few seconds */
 setInterval(() => save(), 2000);
+
+$setPasswordButton.addEventListener("click", function () {
+  password = $password.value;
+});
