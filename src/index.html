@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="./index.css" />
     <title>Fastnotes</title>
   </head>
-  <body class="bg-gray-50 min-h-screen w-full flex">
+  <body class="bg-gray-50 min-h-screen w-full">
     <main
-      class="py-20 px-5 md:px-20 lg:px-32 h-screen overflow-scroll flex-grow-1 w-9/12 space-y-5"
+      class="py-20 px-5 md:px-20 lg:px-32 h-screen overflow-scroll space-y-5"
     >
       <time id="created_at" class="font-semibold text-gray-400"></time>
 
@@ -25,40 +25,16 @@
         data-placeholder="Start writing"
         contenteditable="true"
       ></div>
+
+      <div>
+        <button
+          class="px-4 py-2 rounded font-medium bg-gray-300 text-gray-700"
+          id="password_button"
+        >
+          Set password
+        </button>
+      </div>
     </main>
-
-    <div class="h-screen flex-grow-1 w-3/12">
-      <aside
-        class="sticky bg-gray-100 h-screen overflow-scroll top-0 border-l-4 p-8 space-y-5"
-      >
-        <!-- Password group -->
-        <section>
-          <h3 class="font-semibold mb-2">Password</h3>
-          <form id="password_form" class="flex">
-            <input
-              id="password"
-              type="text"
-              name="password"
-              class="rounded-l-md block flex-grow w-0 p-1 text-sm bg-gray-100 border border-gray-300 focus:outline-none focus:border-indigo-600"
-            />
-            <button
-              id="set_password_button"
-              class="rounded-r-md rounded- block flex-none py-1 px-2 text-sm bg-gray-300 text-gray-700 border border-gray-300 focus:bg-indigo-600 focus:text-gray-100"
-            >
-              Enter
-            </button>
-          </form>
-        </section>
-
-        <!-- Suggestions -->
-        <section>
-          <h3 class="font-semibold mb-2">Suggestions</h3>
-          <ul class="list-outside ml-5 list-disc" id="suggestions">
-            <li>No suggestions yet</li>
-          </ul>
-        </section>
-      </aside>
-    </div>
   </body>
   <script src="~/script.js"></script>
 </html>

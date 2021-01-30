@@ -11,19 +11,18 @@ const $createdAt = document.querySelector("#created_at");
 const $title = document.querySelector("#title");
 const $note = document.querySelector("#editor");
 
-const $passwordForm = document.querySelector("#password_form");
+const $passwordButton = document.querySelector("#password_button");
 
 // Default password
-let password = "SECRET_KEY";
-
-// Password required to open note?
-let requirePassword = false;
+let password = "password";
+let hint = "";
 
 const $suggestions = document.querySelector("#suggestions");
 
-let previousCompressedNote;
+let prevNoteState;
 const save = () => {
   const title = $title.innerText;
+  const content = $note.innerText
 
   // Only save note if title is not empty
   if (title) {
@@ -40,48 +39,46 @@ const save = () => {
       createdAt: createdAt.toISOString(),
       title,
       content: AES.encrypt(
-        JSON.stringify($note.innerText),
+        JSON.stringify(content),
         password.trim()
       ).toString(),
+      hint,
     };
 
     const compressed = compress(JSON.stringify(note));
 
-    // Don't save note if it's the same as this will case unnecessary history
-    if (compressed === previousCompressedNote) return;
+    // Create note state to check if anything has changed
+    const noteState = { createdAt, title, content, hint, password };
+    if (JSON.stringify(noteState) === JSON.stringify(prevNoteState)) return;
 
     history.replaceState(undefined, undefined, `#${compressed}`);
     setTitle(title);
 
-    previousCompressedNote = compressed;
+    prevNoteState = noteState;
   }
 };
 
 const load = () => {
+  if (!location.hash) return;
+
   const note = JSON.parse(decompress(location.hash.substring(1)));
-  if (note) {
-    $title.innerText = note.title;
 
-    console.log("Unlocking note with password:", password.trim());
+  $title.innerText = note.title;
+  createdAt = new Date(note.createdAt);
+  $createdAt.innerText = formatCreatedAt(createdAt);
+  hint = note.hint || "No hint has been provided";
 
-    // Decrypt notes
-    try {
-      const bytes = AES.decrypt(note.content, password);
-      console.log(bytes.toString(enc.Utf8));
-      $note.innerText = JSON.parse(bytes.toString(enc.Utf8)); // Throws error if password incorrect
-      createdAt = new Date(note.createdAt);
-      setTitle(note.title);
-
-      $createdAt.innerText = formatCreatedAt(createdAt);
-    } catch (e) {
-      console.log("need to enter password!");
-      $note.setAttribute(
-        "data-placeholder",
-        "Please enter the password to view the note"
-      );
-      requirePassword = true;
-    }
+  const contentBytes = AES.decrypt(note.content, password);
+  let content;
+  try {
+    content = JSON.parse(contentBytes.toString(enc.Utf8));
+  } catch (e) {
+    // Passworrd required
+    password = prompt(`${hint}\n\nEnter the password:`);
+    return load();
   }
+
+  $note.innerText = content;
 };
 
 /* Load note from URL */
@@ -97,16 +94,8 @@ $note.addEventListener("paste", (e) => {
 /* Control S to save, or save on enter, and show suggestions on save */
 window.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-    save();
-
-    // Show write good suggestions
-    $suggestions.innerHTML = "";
-    const suggestions = getWritingSuggestions($note.innerText);
-    suggestions.forEach((suggestion) => {
-      $suggestions.innerHTML += `<li>${suggestion.explanation}</li>`;
-    });
-
     e.preventDefault();
+    save();
   }
   if (e.code == "Enter") {
     save();
@@ -116,10 +105,7 @@ window.addEventListener("keydown", (e) => {
 /* Save every few seconds */
 setInterval(() => save(), 2000);
 
-$passwordForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-  const data = new FormData($passwordForm);
-  password = data.get("password");
-
-  if (requirePassword) load();
+$passwordButton.addEventListener("click", function () {
+  password = prompt("Enter a password:", password);
+  hint = prompt("Enter a hint (leave blank for no hint):", hint);
 });
