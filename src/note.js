@@ -4,14 +4,10 @@ import {
 } from "lz-string";
 import { AES, enc } from "crypto-js";
 
-import { formatCreatedAt, setTitle, getWritingSuggestions } from "./utils";
+import { formatCreatedAt, setTitle } from "./utils";
+import { $createdAt, $title, $note, $passwordButton } from "./ui";
 
 let createdAt;
-const $createdAt = document.querySelector("#created_at");
-const $title = document.querySelector("#title");
-const $note = document.querySelector("#editor");
-
-const $passwordButton = document.querySelector("#password_button");
 
 // Default password
 let password = "password";
@@ -20,9 +16,9 @@ let hint = "";
 const $suggestions = document.querySelector("#suggestions");
 
 let prevNoteState;
-const save = () => {
+export const save = () => {
   const title = $title.innerText;
-  const content = $note.innerText
+  const content = $note.innerText;
 
   // Only save note if title is not empty
   if (title) {
@@ -32,16 +28,11 @@ const save = () => {
       $createdAt.innerText = formatCreatedAt(createdAt);
     }
 
-    console.log("Saving note with password:", password);
-
     // Create note object
     const note = {
       createdAt: createdAt.toISOString(),
       title,
-      content: AES.encrypt(
-        JSON.stringify(content),
-        password.trim()
-      ).toString(),
+      content: AES.encrypt(JSON.stringify(content), password.trim()).toString(),
       hint,
     };
 
@@ -58,7 +49,7 @@ const save = () => {
   }
 };
 
-const load = () => {
+export const load = () => {
   if (!location.hash) return;
 
   const note = JSON.parse(decompress(location.hash.substring(1)));
@@ -81,29 +72,6 @@ const load = () => {
   $note.innerText = content;
 };
 
-/* Load note from URL */
-window.addEventListener("load", load);
-
-/* Prevent rich text in editor */
-$note.addEventListener("paste", (e) => {
-  e.preventDefault();
-  var text = e.clipboardData.getData("text/plain");
-  document.execCommand("insertText", false, text);
-});
-
-/* Control S to save, or save on enter, and show suggestions on save */
-window.addEventListener("keydown", (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-    e.preventDefault();
-    save();
-  }
-  if (e.code == "Enter") {
-    save();
-  }
-});
-
-/* Save every few seconds */
-setInterval(() => save(), 2000);
 
 $passwordButton.addEventListener("click", function () {
   password = prompt("Enter a password:", password);
