@@ -5,7 +5,15 @@ import {
 import { AES, enc } from "crypto-js";
 
 import { formatCreatedAt, setTitle } from "./utils";
-import { $createdAt, $title, $note, $passwordButton } from "./ui";
+import { copyToClipboard } from "./clipboard";
+import {
+  $createdAt,
+  $title,
+  $note,
+  $passwordButton,
+  $copyUrlButton,
+  $copyShortUrlButton,
+} from "./ui";
 
 let createdAt;
 
@@ -72,8 +80,12 @@ export const load = () => {
   $note.innerText = content;
 };
 
-
 $passwordButton.addEventListener("click", function () {
   password = prompt("Enter a password:", password);
   hint = prompt("Enter a hint (leave blank for no hint):", hint);
+});
+
+$copyUrlButton.addEventListener("click", function () {
+  save();
+  copyToClipboard(window.location);
 });
